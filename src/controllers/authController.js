@@ -27,7 +27,7 @@ export const valLogin = async (req, res, next)=>{
     if (!user) return res.status(401).json({ message: "Credenciales inválidas" });
 
     const storedPassword = await pool.query(USERQUERY.GETPASSWORD, [email]);
-    const isMatch = await bcrypt.compare(password, storedPassword);
+    const isMatch = await bcrypt.compare(JSON.stringify(password), storedPassword);
     if (!isMatch) return res.status(401).json({ message: "Credenciales inválidas" });
 
     return res.json({message : "Inicio se sesión valido"})
