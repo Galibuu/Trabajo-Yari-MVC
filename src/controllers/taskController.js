@@ -3,7 +3,7 @@ import {TASKQUERY} from "../models/taskModel.js"
 
 export const createTask = async (req, res, next) => {
     const {title, description, status, assigned_to, team_id} = req.body
-    const result = await pool.query(TASKQUERY)
+    const result = await pool.query(TASKQUERY.CREATE, [title, description, status, assigned_to, team_id])
     res.status(201).json({
         message: "Tarea creada",
         data: result.rows[0]
