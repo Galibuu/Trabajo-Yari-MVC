@@ -13,7 +13,7 @@ export const createTask = async (req, res, next) => {
 export const getTasks = async (req, res, next) => {
     const result = await pool.query(TASKQUERY.GETALL, [req.params.team_id])
     res.status(200).json({
-        message: "Tareas obtenidas",
+        message: "Tareas listadas",
         data: result.rows
     })
 }

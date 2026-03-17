@@ -15,7 +15,7 @@ const user = req.body
     await pool.query(USERQUERY.CREATE,[user.name,user.email,hash]);
     res.status(201).json({
         message: "Usuario creado",
-        data: "Usuario creado exitosamente"
+        data: "Usuario creado boeeee"
     })
     console.log("datos enviados")
 
@@ -31,6 +31,6 @@ export const valLogin = async (req, res, next)=>{
     const isMatch = await bcrypt.compare(password, storedPassword);
     if (!isMatch) return res.status(401).json({ message: "Credenciales inválidas" });
 
-    return res.json({message : "Inicio se sesión valido"})
+    return res.json({message : "Inicio de sesión valido"})
 
 }

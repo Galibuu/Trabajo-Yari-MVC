@@ -11,7 +11,8 @@ export const createTeam = async (req, res, next) => {
 }
 
 export const addMember = async (req, res, next) => {
-    const {team_id, user_id} = req.body
+    const {team_id} = req.params
+    const {user_id} = req.body
     await pool.query(TEAMQUERY.ADDMEMBER, [team_id, user_id])  
     res.status(200).json({
         message: "Miembro agregado al equipo"
