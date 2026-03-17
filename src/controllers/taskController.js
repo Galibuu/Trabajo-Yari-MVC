@@ -21,7 +21,7 @@ export const getTasks = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
     const {title, description, status} = req.body
 
-    const result = await pool.query(TASKQUERY.UPDATE, [title, description, status, task_id])
+    const result = await pool.query(TASKQUERY.UPDATE, [title, description, status, req.params.task_id])
     res.status(200).json({
         message: "Tarea actualizada",
         data: result.rows[0]
