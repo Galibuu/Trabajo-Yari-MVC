@@ -11,9 +11,9 @@ const PORT = process.env.PORT
 app.use(express.json())
 
 
-app.use("/user", userRoutes)
-// app.use("/task", taskRoutes)
-// app.use("/team", teamRoutes)
+app.use("/", userRoutes)
+app.use("/", taskRoutes)
+app.use("/", teamRoutes)
 
 app.listen(PORT, () =>{
     console.log("Server iniciado en " + PORT)

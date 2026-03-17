@@ -3,7 +3,7 @@ import {register, valLogin} from "../controllers/authController.js";
 
 const router = Router();
 
-router.post("/register", register);
-router.post("/login", valLogin);
+router.post("/user/register", register);
+router.post("/user/login", valLogin);
 
-export default router
+export default router;

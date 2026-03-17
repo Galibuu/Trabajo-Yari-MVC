@@ -7,4 +7,4 @@ router.post("/nuevoEquipo", createTeam)
 router.post("/agregarMiembro/:team_id", addMember)
 router.get("/obtenerMiembros/:team_id", getMembers)
 
-export default router
+export default router;
