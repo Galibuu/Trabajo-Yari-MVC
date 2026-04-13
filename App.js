@@ -15,6 +15,12 @@ app.use("/", userRoutes)
 app.use("/", taskRoutes)
 app.use("/", teamRoutes)
 
+// Global error-handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).json({message: "Error interno del servidor"})
+})
+
 app.listen(PORT, () =>{
     console.log("Server iniciado en " + PORT)
     DBConnection()
