@@ -8,29 +8,55 @@ export const getUsers = (req, res) =>{
 }
 
 
-export const register = async (req, res,next)=>{
-const user = req.body
-    const hash = await bcrypt.hash(user.password, 10)
+export const register = async (req, res, next)=>{
+    try {
+        const {name, email, password} = req.body
 
-    await pool.query(USERQUERY.CREATE,[user.name,user.email,hash]);
-    res.status(201).json({
-        message: "Usuario creado",
-        data: "Usuario creado boeeee"
-    })
-    console.log("datos enviados")
+        if (!name || !email || !password) {
+            return res.status(400).json({message: "Los campos name, email y password son obligatorios"})
+        }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({message: "El formato del email no es válido"})
+        }
+
+        const hash = await bcrypt.hash(password, 10)
+
+        await pool.query(USERQUERY.CREATE, [name, email, hash]);
+        res.status(201).json({
+            message: "Usuario creado",
+            data: "Usuario creado boeeee"
+        })
+    } catch (error) {
+        next(error)
+    }
 }
 
 export const valLogin = async (req, res, next)=>{
-    const {email, password} = req.body  
-    const user = await pool.query(USERQUERY.GETEMAIL, [email]);
-    if (!user) return res.status(401).json({ message: "Credenciales inválidas" });
+    try {
+        const {email, password} = req.body
 
-    let storedPassword = await pool.query(USERQUERY.GETPASSWORD, [email]);
-    storedPassword = storedPassword.rows[0].password
-    const isMatch = await bcrypt.compare(password, storedPassword);
-    if (!isMatch) return res.status(401).json({ message: "Credenciales inválidas" });
+        if (!email || !password) {
+            return res.status(400).json({message: "Los campos email y password son obligatorios"})
+        }
 
-    return res.json({message : "Inicio de sesión valido"})
+        const user = await pool.query(USERQUERY.GETEMAIL, [email]);
+        if (user.rows.length === 0) {
+            return res.status(401).json({message: "Credenciales inválidas"});
+        }
 
+        const storedPasswordResult = await pool.query(USERQUERY.GETPASSWORD, [email]);
+        if (storedPasswordResult.rows.length === 0) {
+            return res.status(401).json({message: "Credenciales inválidas"});
+        }
+
+        const storedPassword = storedPasswordResult.rows[0].password
+        const isMatch = await bcrypt.compare(password, storedPassword);
+        if (!isMatch) return res.status(401).json({message: "Credenciales inválidas"});
+
+        return res.status(200).json({message: "Inicio de sesión valido"})
+    } catch (error) {
+        next(error)
+    }
 }
